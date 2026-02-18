@@ -1,7 +1,12 @@
+"use client";
+
 import Image from "next/image";
-import { TextInput } from "@mantine/core";
+import { useState } from "react";
+import { TextInput, ActionIcon } from "@mantine/core";
+import { IconArrowRight, IconSearch } from '@tabler/icons-react';
 
 export default function Home() {
+  const [value, setValue] = useState('');
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
@@ -21,11 +26,22 @@ export default function Home() {
         <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
           <TextInput
             variant="filled"
+            value={value}
+            onChange={(event) => setValue(event.currentTarget.value)}
             size="md"
             radius="xl"
             label="Search"
-            description="For a Wikipedia article."
-            placeholder="Input placeholder"
+            description="for a Wikipedia article."
+            rightSection={
+              <ActionIcon 
+              size={32}
+              radius="xl"
+              variant="filled"
+              aria-label="Search"
+              >
+              <IconArrowRight size={18} stroke={1.5} />
+              </ActionIcon>
+            }
           />
         </div>
       </main>
