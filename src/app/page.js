@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Input } from "@mantine/core";
+import { TextInput } from "@mantine/core";
 
 export default function Home() {
   return (
@@ -19,7 +19,14 @@ export default function Home() {
           </h1>
         </div>
         <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <Input variant="filled" size="lg" radius="lg" placeholder="Search..." />
+          <TextInput
+            variant="filled"
+            size="md"
+            radius="xl"
+            label="Search"
+            description="For a Wikipedia article."
+            placeholder="Input placeholder"
+          />
         </div>
       </main>
     </div>
