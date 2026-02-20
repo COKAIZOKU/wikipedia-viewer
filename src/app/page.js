@@ -43,13 +43,14 @@ export default function Home() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="gap-5 flex w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-5xl font-bold leading-10 tracking-tight text-black dark:text-zinc-50">
+        <div className="flex flex-col items-center gap-6 text-center items-start text-left w-full">
+          <h1 className="text-5xl font-bold leading-10 tracking-tight text-black dark:text-zinc-50 w-full">
             Wikipedia <br></br> Viewer.
           </h1>
         </div>
-        <div className="flex flex-col gap-4 sm:flex-row">
+        <div className="flex flex-col gap-4 sm:flex-row w-full">
           <TextInput
+            w="100%"
             variant="filled"
             value={value}
             onChange={(event) => setValue(event.currentTarget.value)}
@@ -62,7 +63,6 @@ export default function Home() {
                 handleSubmit();
               }
             }}
-            leftSection={<IconSearch size={18} stroke={1.5} />}
             rightSection={
               <ActionIcon 
               size={32}
@@ -78,11 +78,11 @@ export default function Home() {
           />
         </div>
         {response?.query?.search?.map(item => (
-        <div key={item.pageid} className="flex flex-col sm:flex-col">
-          <h2 className="max-w-xs text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+        <div key={item.pageid} className="flex flex-col sm:flex-col w-full">
+          <h2 className="text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50 w-full">
             {item.title}
           </h2>
-          <p dangerouslySetInnerHTML={{ __html: item.snippet}} className="max-w-xs tracking-tight text-black dark:text-zinc-50">
+          <p dangerouslySetInnerHTML={{ __html: item.snippet}} className="tracking-tight text-black dark:text-zinc-50 w-full">
           </p>
         </div>
         ))}
