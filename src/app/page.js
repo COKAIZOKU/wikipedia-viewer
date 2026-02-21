@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { TextInput, ActionIcon, Title } from "@mantine/core";
+import { TextInput, ActionIcon, Title, Button } from "@mantine/core";
 import { IconArrowRight, IconSearch } from '@tabler/icons-react';
 
 export default function Home() {
@@ -40,6 +40,30 @@ export default function Home() {
     .catch(function(error){console.log(error);});
   }
 
+  var paramsRandom = {
+    action: "query",
+    format: "json",
+    rnlimit: "1",
+    list: "random",
+  }
+
+  var urlRandom = url + "?origin=*";
+  Object.keys(paramsRandom).forEach(function(key){urlRandom += "&" + key + "=" + paramsRandom[key];});
+  const handleRandom = () => {
+    fetch(urlRandom)
+    .then(function(responseRandom){return responseRandom.json();})
+    .then(function(responseRandom) {
+      var randoms = responseRandom.query.random;
+      console.log(responseRandom)
+      const title = randoms[0].title;
+      const articleUrl =
+        "https://en.wikipedia.org/wiki/" +
+        encodeURIComponent(title.replace(/ /g, "_"));
+      window.open(articleUrl, "_blank");
+    })
+    .catch(function(error){console.log(error)})
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="gap-5 flex w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
@@ -48,7 +72,8 @@ export default function Home() {
             Wikipedia <br></br> Viewer.
           </h1>
         </div>
-        <div className="flex flex-col gap-4 sm:flex-row w-full">
+        <div className="grid grid-cols-12 flex flex-col gap-4 sm:flex-row w-full">
+          <div className="col-span-8">
           <TextInput
             w="100%"
             variant="filled"
@@ -76,6 +101,10 @@ export default function Home() {
               </ActionIcon>
             }
           />
+          </div>
+          <div className="col-span-4 mt-auto">
+          <Button onClick={handleRandom} color="#212529" size="md" className="mt-auto" variant="filled" radius="xl" fullWidth>Random Article</Button>
+          </div>
         </div>
         {response?.query?.search?.map(item => (
         <div key={item.pageid} className="flex flex-col sm:flex-col w-full">
