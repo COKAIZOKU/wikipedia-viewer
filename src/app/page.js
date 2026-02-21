@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { TextInput, ActionIcon, Title, Button } from "@mantine/core";
-import { IconArrowRight, IconSearch } from '@tabler/icons-react';
+import { IconArrowRight, IconSearch, IconExternalLink} from '@tabler/icons-react';
 
 export default function Home() {
   const [value, setValue] = useState('');
@@ -108,9 +108,14 @@ export default function Home() {
         </div>
         {response?.query?.search?.map(item => (
         <div key={item.pageid} className="flex flex-col sm:flex-col w-full">
-          <h2 className="text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50 w-full">
-            {item.title}
-          </h2>
+          <div className="flex gap-1">
+            <ActionIcon className="my-auto" variant="transparent" color="gray" aria-label="Settings">
+              <IconExternalLink style={{ width: '70%', height: '70%' }} stroke={1.5} />
+            </ActionIcon>
+            <h2 className="text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50 w-full">
+              {item.title}
+            </h2>
+          </div>
           <p dangerouslySetInnerHTML={{ __html: item.snippet}} className="tracking-tight text-black dark:text-zinc-50 w-full">
           </p>
         </div>
