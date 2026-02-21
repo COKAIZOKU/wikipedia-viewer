@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { TextInput, ActionIcon, Title, Button } from "@mantine/core";
+import { TextInput, ActionIcon, Button, Loader } from "@mantine/core";
 import { IconArrowRight, IconSearch, IconExternalLink} from '@tabler/icons-react';
 
 export default function Home() {
   const [value, setValue] = useState('');
   const [response, setResponse] = useState(null);
+  const [loading, setLoading] = useState(false); // idk if im going to use it
+  const [data, setData] = useState(null);
   
   var url = "https://en.wikipedia.org/w/api.php"; 
   var params = new URLSearchParams({
@@ -18,11 +20,15 @@ export default function Home() {
   });
 
   const handleSubmit = () => {
+    setLoading(true);
+
     fetch(`${url}?${params}`)
     .then(function(response){return response.json();})
     .then(function(response) {
+
         console.log("API response:", response);
         setResponse(response);
+        setData(response);
 
         const ids = (response.query?.search || [])
         .map(x => x.pageid)
@@ -37,7 +43,16 @@ export default function Home() {
             setExtracts(extractsResponse);
           })
     })
-    .catch(function(error){console.log(error);});
+    .catch(function(error){console.log(error);})
+    .finally(() => {
+      setLoading(false);
+    });
+  }
+  const handleClick = (title) => {
+    const articleUrl = 
+    "https://en.wikipedia.org/wiki/" +
+        encodeURIComponent(title.replace(/ /g, "_"));
+    window.open(articleUrl, "_blank", "noopener,noreferrer");
   }
 
   var paramsRandom = {
@@ -56,19 +71,19 @@ export default function Home() {
       var randoms = responseRandom.query.random;
       console.log(responseRandom)
       const title = randoms[0].title;
-      const articleUrl =
+      const randomUrl =
         "https://en.wikipedia.org/wiki/" +
         encodeURIComponent(title.replace(/ /g, "_"));
-      window.open(articleUrl, "_blank");
+      window.open(randomUrl, "_blank", "noopener,noreferrer");
     })
     .catch(function(error){console.log(error)})
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="gap-5 flex w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+      <main className="gap-2 flex w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
         <div className="flex flex-col items-center gap-6 text-center items-start text-left w-full">
-          <h1 className="text-5xl font-bold leading-10 tracking-tight text-black dark:text-zinc-50 w-full">
+          <h1 className="mb-5 text-5xl font-bold leading-10 tracking-tight text-black dark:text-zinc-50 w-full">
             Wikipedia <br></br> Viewer.
           </h1>
         </div>
@@ -106,10 +121,13 @@ export default function Home() {
           <Button onClick={handleRandom} color="#212529" size="md" className="mt-auto" variant="filled" radius="xl" fullWidth>Random Article</Button>
           </div>
         </div>
+        {data && 
+        <p className="flex flex-col w-full text-zinc-400 text-sm">Found {data.query?.search?.length || 0} {data.query?.search?.length === 1 ? "article" : "articles"}. </p>
+        }
         {response?.query?.search?.map(item => (
         <div key={item.pageid} className="flex flex-col sm:flex-col w-full">
           <div className="flex gap-1">
-            <ActionIcon className="my-auto" variant="transparent" color="gray" aria-label="Settings">
+            <ActionIcon onClick={() => handleClick(item.title)} className="my-auto" variant="transparent" color="gray" aria-label="Settings">
               <IconExternalLink style={{ width: '70%', height: '70%' }} stroke={1.5} />
             </ActionIcon>
             <h2 className="text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50 w-full">
