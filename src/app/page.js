@@ -124,20 +124,21 @@ export default function Home() {
         {data && 
         <p className="flex flex-col w-full text-zinc-400 text-sm">Found {data.query?.search?.length || 0} {data.query?.search?.length === 1 ? "article" : "articles"}. </p>
         }
-        {response?.query?.search?.map(item => (
-        <div key={item.pageid} className="flex flex-col sm:flex-col w-full">
+        {response?.query?.search?.map(item => {
+        const articleUrl =
+          "https://en.wikipedia.org/wiki/" + encodeURIComponent(item.title.replace(/ /g, "_"));
+        return (
+        <div key={item.pageid} className="gap-2 mb-5 flex flex-col sm:flex-col w-full">
           <div className="flex gap-1">
-            <ActionIcon onClick={() => handleClick(item.title)} className="my-auto" variant="transparent" color="gray" aria-label="Settings">
-              <IconExternalLink style={{ width: '70%', height: '70%' }} stroke={1.5} />
-            </ActionIcon>
             <h2 className="text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50 w-full">
               {item.title}
             </h2>
           </div>
           <p dangerouslySetInnerHTML={{ __html: item.snippet}} className="tracking-tight text-black dark:text-zinc-50 w-full">
           </p>
+          <Button leftSection={ <IconExternalLink size={14} />}  onClick={() => handleClick(item.title)} variant="light" color="gray" size="xs" radius="xl">{articleUrl}</Button>
         </div>
-        ))}
+        )})}
       </main>
     </div>
   );
