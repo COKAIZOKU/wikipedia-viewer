@@ -136,7 +136,9 @@ export default function Home() {
           </div>
           <p dangerouslySetInnerHTML={{ __html: item.snippet}} className="tracking-tight text-black dark:text-zinc-50 w-full">
           </p>
-          <Button leftSection={ <IconExternalLink size={14} />}  onClick={() => handleClick(item.title)} variant="transparent" color="gray" size="compact-xs" radius="xl">{articleUrl}</Button>
+          <div>
+            <Button leftSection={ <IconExternalLink size={14} />}  onClick={() => handleClick(item.title)} variant="light" color="gray" size="compact-xs" radius="xl">{articleUrl}</Button>
+          </div>
         </div>
         )})}
       </main>
