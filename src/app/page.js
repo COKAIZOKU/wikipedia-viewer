@@ -103,6 +103,7 @@ export default function Home() {
                 handleSubmit();
               }
             }}
+            leftSection={<IconSearch size={18} stroke={1.5} />}
             rightSection={
               <ActionIcon 
               size={32}
@@ -137,7 +138,7 @@ export default function Home() {
           <p dangerouslySetInnerHTML={{ __html: item.snippet}} className="tracking-tight text-black dark:text-zinc-50 w-full">
           </p>
           <div>
-            <Button leftSection={ <IconExternalLink size={14} />}  onClick={() => handleClick(item.title)} variant="light" color="gray" size="compact-xs" radius="xl">{articleUrl}</Button>
+            <Button leftSection={ <IconExternalLink size={14} />}  onClick={() => handleClick(item.title)} variant="light" color="gray" size="compact-xs" radius="xs">{articleUrl}</Button>
           </div>
         </div>
         )})}
