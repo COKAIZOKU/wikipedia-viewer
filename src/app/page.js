@@ -129,17 +129,13 @@ export default function Home() {
         const articleUrl =
           "https://en.wikipedia.org/wiki/" + encodeURIComponent(item.title.replace(/ /g, "_"));
         return (
-        <div key={item.pageid} className="gap-2 mb-5 flex flex-col sm:flex-col w-full">
-          <div className="flex gap-1">
-            <h2 className="text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50 w-full">
+        <div key={item.pageid} className="gap-1 mb-6 flex flex-col sm:flex-col w-full">
+          <p className="text-2xl font-semibold tracking-tight text-black w-full">
               {item.title}
-            </h2>
-          </div>
-          <p dangerouslySetInnerHTML={{ __html: item.snippet}} className="tracking-tight text-black dark:text-zinc-50 w-full">
           </p>
-          <div>
-            <Button leftSection={ <IconExternalLink size={14} />}  onClick={() => handleClick(item.title)} variant="light" color="gray" size="compact-xs" radius="xs">{articleUrl}</Button>
-          </div>
+          <p dangerouslySetInnerHTML={{ __html: item.snippet}} className="text-md tracking-tight text-black dark:text-zinc-50 w-full">
+          </p>
+            <Button justify="space-between" rightSection={ <IconExternalLink size={14} />}  onClick={() => handleClick(item.title)} variant="light" color="gray" size="xs" radius="xs">{articleUrl}</Button>
         </div>
         )})}
       </main>
