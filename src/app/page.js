@@ -81,8 +81,15 @@ export default function Home() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center font-sans dark:bg-black">
-      <main className="gap-2 flex w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden font-sans dark:bg-black">
+      <div className="pointer-events-none fixed absolute inset-0 flex items-center justify-center">
+        <img
+          src="/wikipedia-logo.svg"
+          alt="Wikipedia logo background"
+          className="w-[200rem]"
+        />
+      </div>
+      <main className="relative z-10 gap-2 flex w-full max-w-3xl flex-col items-center justify-between py-32 px-16 sm:items-start">
         <div className="flex flex-col items-center gap-6 text-center items-start text-left w-full">
           <h1 className="mb-3 text-5xl font-bold leading-10 tracking-tight text-black dark:text-zinc-50 w-full">
             Wikipedia <br></br> Viewer.
