@@ -60,6 +60,7 @@ export default function Home() {
     format: "json",
     rnlimit: "1",
     list: "random",
+    rnnamespace: "0",
   }
 
   var urlRandom = url + "?origin=*";
