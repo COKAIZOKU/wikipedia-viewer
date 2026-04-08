@@ -84,7 +84,7 @@ export default function Home() {
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden font-sans dark:bg-black">
       <div className="pointer-events-none fixed absolute inset-0 flex items-center justify-center">
         <img
-          src="/wikipedia-logo.svg"
+          src="/wikipedia.svg"
           alt="Wikipedia logo background"
           className="w-[200rem]"
         />
