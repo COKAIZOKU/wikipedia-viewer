@@ -86,7 +86,7 @@ export default function Home() {
         <img
           src="/wikipedia.svg"
           alt="Wikipedia logo background"
-          className="w-[200rem]"
+          className="w-[200rem] opacity-50"
         />
       </div>
       <main className="relative z-10 gap-2 flex w-full max-w-3xl flex-col items-center justify-between py-32 px-16 sm:items-start">
@@ -133,17 +133,24 @@ export default function Home() {
         {data && 
         <p className="flex flex-col w-full text-zinc-400 text-sm">Found {data.query?.search?.length || 0} {data.query?.search?.length === 1 ? "article" : "articles"}. </p>
         }
-        {response?.query?.search?.map(item => {
+        {response?.query?.search?.map((item, idx) => {
         const articleUrl =
           "https://en.wikipedia.org/wiki/" + encodeURIComponent(item.title.replace(/ /g, "_"));
         return (
-        <div key={item.pageid} className="gap-1 mb-6 flex flex-col sm:flex-col w-full">
-          <p className="text-2xl font-semibold tracking-tight text-black w-full">
-              {item.title}
-          </p>
+        <div key={item.pageid} className="gap-1 mb-8 flex flex-col sm:flex-col w-full">
+          <div className="flex justify gap-2">
+            <p className="text-2xl font-semibold tracking-tight text-black">
+              <span>{idx + 1}.</span>
+            </p>
+            <p className="text-2xl font-semibold tracking-tight text-black">
+                {item.title}
+            </p>
+          </div>
           <p dangerouslySetInnerHTML={{ __html: item.snippet}} className="text-md tracking-tight text-black dark:text-zinc-50 w-full">
           </p>
-            <Button justify="space-between" rightSection={ <IconExternalLink size={14} />}  onClick={() => handleClick(item.title)} variant="light" color="gray" size="xs" radius="xs">{articleUrl}</Button>
+            <div justify="space-between" onClick={() => handleClick(item.title)} className="text-zinc-400 underline cursor-pointer text-xs transition-opacity hover:opacity-70">
+              {articleUrl}
+            </div>
         </div>
         )})}
       </main>
