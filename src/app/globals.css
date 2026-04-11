@@ -33,6 +33,12 @@ body {
   animation-iteration-count: infinite;
 }
 
+.background {
+  width: 100%;
+  height: auto;
+  min-width: 1200px;
+}
+
 .background .letter-1 path { animation-delay: 0s; }
 .background .letter-2 path { animation-delay: -2.5s; }
 .background .letter-3 path { animation-delay: -5s; }

@@ -189,7 +189,7 @@ export default function Home() {
           </div>
         </div>
         {data && 
-        <p className="flex flex-col w-full text-zinc-400 text-sm">Found {data.query?.search?.length || 0} {data.query?.search?.length === 1 ? "article" : "articles"}. </p>
+        <p className="flex flex-col w-full text-zinc-400 text-sm mb-4">Found {data.query?.search?.length || 0} {data.query?.search?.length === 1 ? "article" : "articles"}. </p>
         }
         {response?.query?.search?.map((item, idx) => {
         const articleUrl =
