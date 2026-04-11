@@ -24,3 +24,30 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.background g path {
+  fill: #f1f3f588;
+  animation-name: oneLetterAtATime;
+  animation-duration: 25s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.background .letter-1 path { animation-delay: 0s; }
+.background .letter-2 path { animation-delay: -2.5s; }
+.background .letter-3 path { animation-delay: -5s; }
+.background .letter-4 path { animation-delay: -7.5s; }
+.background .letter-5 path { animation-delay: -10s; }
+.background .letter-6 path { animation-delay: -12.5s; }
+.background .letter-7 path { animation-delay: -15s; }
+.background .letter-8 path { animation-delay: -17.5s; }
+.background .letter-9 path { animation-delay: -20s; }
+.background .letter-10 path { animation-delay: -22.5s; }
+
+@keyframes oneLetterAtATime {
+  0%   { fill: #f1f3f588; }
+  4%   { fill: #f1f3f5; }
+  8%   { fill: #f1f3f5; }
+  12%  { fill: #f1f3f588; }
+  100% { fill: #F1F3F588; }
+}
