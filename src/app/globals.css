@@ -26,7 +26,7 @@ body {
 }
 
 .background g path {
-  fill: #f1f3f570;
+  fill: #f1f3f560;
   animation-name: oneLetterAtATime;
   animation-duration: 25s;
   animation-timing-function: linear;
@@ -45,9 +45,9 @@ body {
 .background .letter-10 path { animation-delay: -22.5s; }
 
 @keyframes oneLetterAtATime {
-  0%   { fill: #f1f3f570; }
+  0%   { fill: #f1f3f560; }
   4%   { fill: #f1f3f5; }
   8%   { fill: #f1f3f5; }
-  12%  { fill: #f1f3f570; }
-  100% { fill: #F1F3F570; }
+  12%  { fill: #f1f3f560; }
+  100% { fill: #F1F3F560; }
 }

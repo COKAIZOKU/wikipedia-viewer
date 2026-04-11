@@ -9,6 +9,15 @@ export default function Home() {
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false); // idk if im going to use it
   const [data, setData] = useState(null);
+  const [extracts, setExtracts] = useState({});
+
+  const firstSentence = (text, fallbackMaxLen = 280) => {
+    if (!text) return text;
+    const match = text.match(/(.+?[.!?])(\s|$)/);
+    if (match && match[1]) return match[1].trim();
+    if (text.length <= fallbackMaxLen) return text;
+    return text.slice(0, fallbackMaxLen).trimEnd() + "...";
+  };
   
   var url = "https://en.wikipedia.org/w/api.php"; 
   var params = new URLSearchParams({
@@ -18,7 +27,7 @@ export default function Home() {
     format: "json",
     origin: "*", 
   });
-
+  
   const handleSubmit = () => {
     setLoading(true);
 
@@ -29,18 +38,32 @@ export default function Home() {
         console.log("API response:", response);
         setResponse(response);
         setData(response);
+        setExtracts({});
 
-        const ids = (response.query?.search || [])
+        const pageids = (response.query?.search || [])
         .map(x => x.pageid)
         .join("|");
 
-        if(!ids) return;
-        
-        return fetch(`https://en.wikipedia.org/w/api.php?action=query&prop=extracts&pageids=${ids}&exintro=1&explaintext=1&format=json`)
+        if(!pageids) return;
+
+        const extractParams = new URLSearchParams({
+          action: "query",
+          prop: "extracts",
+          exintro: "true",
+          explaintext: "true",
+          exsentences: "1",
+          exlimit: "max",
+          redirects: "true",
+          pageids,
+          format: "json",
+          origin: "*",
+        });
+
+        return fetch(`https://en.wikipedia.org/w/api.php?${extractParams.toString()}`)
           .then(r => r.json())
           .then(extractsResponse => {
             console.log("Extracts response:", extractsResponse);
-            setExtracts(extractsResponse);
+            setExtracts(extractsResponse?.query?.pages || {});
           })
     })
     .catch(function(error){console.log(error);})
@@ -171,6 +194,8 @@ export default function Home() {
         {response?.query?.search?.map((item, idx) => {
         const articleUrl =
           "https://en.wikipedia.org/wiki/" + encodeURIComponent(item.title.replace(/ /g, "_"));
+        const extract = extracts?.[item.pageid]?.extract;
+        const shortExtract = firstSentence(extract, 320);
         return (
         <div key={item.pageid} className="gap-1 mb-8 flex flex-col sm:flex-col w-full">
           <div className="flex justify gap-2">
@@ -181,8 +206,9 @@ export default function Home() {
                 {item.title}
             </p>
           </div>
-          <p dangerouslySetInnerHTML={{ __html: item.snippet}} className="text-md tracking-tight text-black dark:text-zinc-50 w-full">
-          </p>
+            <p className="text-md text-justify tracking-tight text-black dark:text-zinc-50 w-full">
+              {shortExtract}
+            </p>
             <div justify="space-between" onClick={() => handleClick(item.title)} className="text-zinc-400 underline cursor-pointer text-xs transition-opacity hover:opacity-70">
               {articleUrl}
             </div>
