@@ -1,16 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { TextInput, ActionIcon, Button } from "@mantine/core";
+import { TextInput, ActionIcon, Button, Loader } from "@mantine/core";
 import {
   IconArrowRight,
   IconSearch,
+  IconExternalLink,
 } from "@tabler/icons-react";
 
 
 export default function Home() {
   const [value, setValue] = useState("");
   const [response, setResponse] = useState(null);
+  const [loading, setLoading] = useState(false); // idk if im going to use it
   const [data, setData] = useState(null);
   const [extracts, setExtracts] = useState({});
 
