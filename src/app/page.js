@@ -1,14 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import { TextInput, ActionIcon, Button, Loader } from "@mantine/core";
+import { useEffect, useState } from "react";
+import {
+  TextInput,
+  ActionIcon,
+  Button,
+  Loader,
+  Transition,
+} from "@mantine/core";
 import {
   IconArrowRight,
   IconSearch,
   IconExternalLink,
 } from "@tabler/icons-react";
-import BackgroundSvg from "./svg/background";
-
+import Background from "./svg/background";
 
 export default function Home() {
   const [value, setValue] = useState("");
@@ -16,6 +21,21 @@ export default function Home() {
   const [loading, setLoading] = useState(false); // idk if im going to use it
   const [data, setData] = useState(null);
   const [extracts, setExtracts] = useState({});
+  const [showResults, setShowResults] = useState(false);
+
+  useEffect(() => {
+    if (!response) {
+      setShowResults(false);
+      return;
+    }
+
+    setShowResults(false);
+    const frameId = requestAnimationFrame(() => {
+      setShowResults(true);
+    });
+
+    return () => cancelAnimationFrame(frameId);
+  }, [response]);
 
   const firstSentence = (text, fallbackMaxLen = 280) => {
     if (!text) return text;
@@ -34,25 +54,21 @@ export default function Home() {
     origin: "*",
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setLoading(true);
 
-    fetch(`${url}?${params}`)
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (response) {
-        console.log("API response:", response);
-        setResponse(response);
-        setData(response);
-        setExtracts({});
+    try {
+      const searchRes = await fetch(`${url}?${params}`);
+      const searchResponse = await searchRes.json();
+      console.log("API response:", searchResponse);
 
-        const pageids = (response.query?.search || [])
-          .map((x) => x.pageid)
-          .join("|");
+      const pageids = (searchResponse.query?.search || [])
+        .map((x) => x.pageid)
+        .join("|");
 
-        if (!pageids) return;
+      let nextExtracts = {};
 
+      if (pageids) {
         const extractParams = new URLSearchParams({
           action: "query",
           prop: "extracts",
@@ -66,21 +82,22 @@ export default function Home() {
           origin: "*",
         });
 
-        return fetch(
+        const extractRes = await fetch(
           `https://en.wikipedia.org/w/api.php?${extractParams.toString()}`,
-        )
-          .then((r) => r.json())
-          .then((extractsResponse) => {
-            console.log("Extracts response:", extractsResponse);
-            setExtracts(extractsResponse?.query?.pages || {});
-          });
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+        );
+        const extractsResponse = await extractRes.json();
+        console.log("Extracts response:", extractsResponse);
+        nextExtracts = extractsResponse?.query?.pages || {};
+      }
+
+      setExtracts(nextExtracts);
+      setResponse(searchResponse);
+      setData(searchResponse);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
   const handleClick = (title) => {
     const articleUrl =
@@ -123,7 +140,7 @@ export default function Home() {
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden font-sans dark:bg-black">
       <div className="pointer-events-none fixed absolute inset-0 flex items-center justify-center">
-        <BackgroundSvg />
+        <Background />
       </div>
       <main className="relative z-10 gap-2 flex w-full max-w-3xl flex-col items-center justify-between py-32 px-16 sm:items-start">
         <div className="flex flex-col items-center gap-6 text-center items-start text-left w-full">
@@ -189,33 +206,42 @@ export default function Home() {
           const extract = extracts?.[item.pageid]?.extract;
           const shortExtract = firstSentence(extract, 320);
           return (
-            <div
+            <Transition
               key={item.pageid}
-              className="gap-1 mb-8 flex flex-col sm:flex-col w-full"
+              mounted={showResults}
+              transition="fade-up"
+              duration={500}
+              timingFunction="ease"
             >
-              <div className="flex justify gap-2">
-                <p className="text-2xl font-semibold tracking-tight text-black">
-                  <span>{idx + 1}.</span>
-                </p>
-                <p className="text-2xl font-semibold tracking-tight text-black">
-                  {item.title}
-                </p>
-              </div>
-              <p className="text-md text-justify tracking-tight text-black dark:text-zinc-50 w-full">
-                {shortExtract}
-              </p>
-              <div
-                justify="space-between"
-                onClick={() => handleClick(item.title)}
-                className="text-zinc-400 underline cursor-pointer text-xs transition-opacity hover:opacity-70"
-              >
-                {articleUrl}
-              </div>
-            </div>
+              {(styles) => (
+                <div
+                  style={styles}
+                  className="gap-1 mb-8 flex flex-col sm:flex-col w-full"
+                >
+                  <div className="flex justify gap-2">
+                    <p className="text-2xl font-semibold tracking-tight text-black">
+                      <span>{idx + 1}.</span>
+                    </p>
+                    <p className="text-2xl font-semibold tracking-tight text-black">
+                      {item.title}
+                    </p>
+                  </div>
+                  <p className="text-md text-justify tracking-tight text-black dark:text-zinc-50 w-full">
+                    {shortExtract}
+                  </p>
+                  <div
+                    justify="space-between"
+                    onClick={() => handleClick(item.title)}
+                    className="text-zinc-400 underline cursor-pointer text-xs transition-opacity hover:opacity-70"
+                  >
+                    {articleUrl}
+                  </div>
+                </div>
+              )}
+            </Transition>
           );
         })}
       </main>
     </div>
   );
 }
-
