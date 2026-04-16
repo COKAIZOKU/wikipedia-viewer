@@ -11,7 +11,7 @@ import {
 import {
   IconArrowRight,
   IconSearch,
-  IconExternalLink,
+  IconArrowUpRight,
 } from "@tabler/icons-react";
 import Background from "./svg/background";
 
@@ -149,7 +149,7 @@ export default function Home() {
           </h1>
         </div>
         <div className="grid grid-cols-12 flex flex-col gap-4 sm:flex-row w-full">
-          <div className="col-span-8">
+          <div className="col-span-12 md:col-span-8">
             <TextInput
               w="100%"
               variant="filled"
@@ -179,17 +179,18 @@ export default function Home() {
               }
             />
           </div>
-          <div className="col-span-4 mt-auto">
+          <div className="col-span-12 md:col-span-4 mt-auto">
             <Button
               onClick={handleRandom}
               color="#212529"
               size="md"
-              className="mt-auto"
+              className="mt-auto btn-hover"
               variant="filled"
               radius="xl"
               fullWidth
             >
-              Random Article
+              <span className="label">Random Article</span>
+              <IconArrowUpRight className="btn-icon translate-y-[1px]" size={20}/>
             </Button>
           </div>
         </div>
