@@ -233,9 +233,10 @@ export default function Home() {
                   <div
                     justify="space-between"
                     onClick={() => handleClick(item.title)}
-                    className="text-zinc-400 underline cursor-pointer text-xs transition-opacity hover:opacity-70"
+                    className="text-zinc-400 gap-[2px] flex underline cursor-pointer text-xs transition-opacity hover:opacity-70"
                   >
-                    {articleUrl}
+                    <span>{articleUrl}</span>
+                    <IconArrowUpRight className="mt-[2px]" size={14}/> 
                   </div>
                 </div>
               )}
