@@ -7,21 +7,36 @@ import {
   Button,
   Loader,
   Transition,
+  useComputedColorScheme,
+  useMantineColorScheme,
 } from "@mantine/core";
 import {
   IconArrowRight,
   IconSearch,
   IconArrowUpRight,
+  IconSun,
+  IconMoon,
 } from "@tabler/icons-react";
 import Background from "./svg/background";
 
 export default function Home() {
+  const { setColorScheme } = useMantineColorScheme();
+  const computedColorScheme = useComputedColorScheme("light", {
+    getInitialValueInEffect: true,
+  });
+  const [mounted, setMounted] = useState(false);
   const [value, setValue] = useState("");
   const [response, setResponse] = useState(null);
-  const [loading, setLoading] = useState(false); // idk if im going to use it
+  const [loading, setLoading] = useState(false); 
   const [data, setData] = useState(null);
   const [extracts, setExtracts] = useState({});
   const [showResults, setShowResults] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const activeColorScheme = mounted ? computedColorScheme : "light";
 
   useEffect(() => {
     if (!response) {
@@ -137,14 +152,36 @@ export default function Home() {
       });
   };
 
+  const toggleColorScheme = () => {
+    setColorScheme(activeColorScheme === "light" ? "dark" : "light");
+  };
+
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden font-sans dark:bg-black">
+    <div
+      className="bg-white dark:bg-zinc-950 relative flex min-h-screen items-center justify-center overflow-hidden font-sans"
+    >
       <div className="pointer-events-none fixed absolute inset-0 flex items-center justify-center">
         <Background />
       </div>
       <main className="relative z-10 gap-2 flex w-full max-w-3xl flex-col items-center justify-between py-32 px-16 sm:items-start">
+        <div className="flex w-full justify-end">
+          <ActionIcon
+            onClick={toggleColorScheme}
+            variant="default"
+            size="lg"
+            aria-label="Toggle color scheme"
+          >
+            {activeColorScheme === "dark" ? (
+              <IconSun size={18} stroke={1.5} />
+            ) : (
+              <IconMoon size={18} stroke={1.5} />
+            )}
+          </ActionIcon>
+        </div>
         <div className="flex flex-col items-center gap-6 text-center items-start text-left w-full">
-          <h1 className="mb-3 text-5xl font-bold leading-10 tracking-tight text-black dark:text-zinc-50 w-full">
+          <h1
+            className="mb-3 text-5xl font-bold leading-10 tracking-tight w-full dark:text-white"
+          >
             Wikipedia <br></br> Viewer.
           </h1>
         </div>
@@ -152,12 +189,13 @@ export default function Home() {
           <div className="col-span-12 md:col-span-8">
             <TextInput
               w="100%"
-              variant="filled"
+              variant="unstyled"
               value={value}
               onChange={(event) => setValue(event.currentTarget.value)}
               size="md"
               radius="xl"
               label="Search"
+              classNames={{input: "!bg-zinc-100 dark:!bg-[#0D0D0F]", label: "dark:text-white"}}
               description="for a Wikipedia article."
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
@@ -166,24 +204,28 @@ export default function Home() {
               }}
               leftSection={<IconSearch size={18} stroke={1.5} />}
               rightSection={
-                <ActionIcon
-                  size={32}
-                  radius="xl"
-                  variant="filled"
-                  color="#212529"
-                  aria-label="Search"
-                  onClick={handleSubmit}
-                >
-                  <IconArrowRight size={18} stroke={1.5} />
-                </ActionIcon>
+                loading ? (
+                  <Loader color="white" size={18} />
+                ) : (
+                  <ActionIcon
+                    size={32}
+                    radius="xl"
+                    variant="filled"
+                    color="#171717"
+                    aria-label="Search"
+                    onClick={handleSubmit}
+                  >
+                    <IconArrowRight className="text-zinc" size={18} stroke={1.5} />
+                  </ActionIcon>
+                )
               }
             />
           </div>
           <div className="col-span-12 md:col-span-4 mt-auto">
             <Button
               onClick={handleRandom}
-              color="#212529"
               size="md"
+              color="#171717"
               className="mt-auto btn-hover"
               variant="filled"
               radius="xl"
@@ -195,7 +237,7 @@ export default function Home() {
           </div>
         </div>
         {data && (
-          <p className="flex flex-col w-full text-zinc-400 text-sm mb-4">
+          <p className="flex flex-col w-full text-zinc-400 dark:text-white-300 text-sm mb-4">
             Found {data.query?.search?.length || 0}{" "}
             {data.query?.search?.length === 1 ? "article" : "articles"}.{" "}
           </p>
@@ -220,20 +262,26 @@ export default function Home() {
                   className="gap-1 mb-8 flex flex-col sm:flex-col w-full"
                 >
                   <div className="flex justify gap-2">
-                    <p className="text-2xl font-semibold tracking-tight text-black">
+                    <p
+                      className="text-2xl dark:text-white text-zinc font-semibold tracking-tight"
+                    >
                       <span>{idx + 1}.</span>
                     </p>
-                    <p className="text-2xl font-semibold tracking-tight text-black">
+                    <p
+                      className="text-2xl dark:text-white text-zinc font-semibold tracking-tight"
+                    >
                       {item.title}
                     </p>
                   </div>
-                  <p className="text-md text-justify tracking-tight text-black dark:text-zinc-50 w-full">
+                  <p
+                    className="text-md text-justify dark:text-white tracking-tight w-full"
+                  >
                     {shortExtract}
                   </p>
                   <div
                     justify="space-between"
                     onClick={() => handleClick(item.title)}
-                    className="text-zinc-400 gap-[2px] flex underline cursor-pointer text-xs transition-opacity hover:opacity-70"
+                    className="text-zinc-400 dark:text-zinc-500 gap-[2px] flex underline cursor-pointer text-xs transition-opacity hover:opacity-70"
                   >
                     <span>{articleUrl}</span>
                     <IconArrowUpRight className="mt-[2px]" size={14}/> 

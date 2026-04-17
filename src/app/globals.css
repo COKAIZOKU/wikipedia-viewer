@@ -1,22 +1,21 @@
 @import "tailwindcss";
+@custom-variant dark (&:where([data-mantine-color-scheme="dark"], [data-mantine-color-scheme="dark"] *));
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --background-letter-dim: #f1f3f560;
+  --background-letter-active: #f1f3f5;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ffffff;
-  }
+:root[data-mantine-color-scheme="dark"] {
+  --background-letter-dim: #2c2e331f;
+  --background-letter-active: #5c5f6649;
 }
 
 body {
@@ -26,7 +25,7 @@ body {
 }
 
 .background g path {
-  fill: #f1f3f560;
+  fill: var(--background-letter-dim);
   animation-name: oneLetterAtATime;
   animation-duration: 25s;
   animation-timing-function: linear;
@@ -51,11 +50,11 @@ body {
 .background .letter-10 path { animation-delay: -22.5s; }
 
 @keyframes oneLetterAtATime {
-  0%   { fill: #f1f3f560; }
-  4%   { fill: #f1f3f5; }
-  8%   { fill: #f1f3f5; }
-  12%  { fill: #f1f3f560; }
-  100% { fill: #F1F3F560; }
+  0%   { fill: var(--background-letter-dim); }
+  4%   { fill: var(--background-letter-active); }
+  8%   { fill: var(--background-letter-active); }
+  12%  { fill: var(--background-letter-dim); }
+  100% { fill: var(--background-letter-dim); }
 }
 
 .btn-hover {
