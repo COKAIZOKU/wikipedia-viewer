@@ -127,7 +127,7 @@ export default function Home() {
   const handleClick = (title) => {
     const articleUrl =
       "https://en.wikipedia.org/wiki/" +
-      encodeURIComponent(title.replaceAll(/ /g, "_"));
+      encodeURIComponent(title.replaceAll(" ","_"));
     window.open(articleUrl, "_blank", "noopener,noreferrer");
   };
 
@@ -156,7 +156,7 @@ export default function Home() {
         const title = randoms[0].title;
         const randomUrl =
           "https://en.wikipedia.org/wiki/" +
-          encodeURIComponent(title.replaceAll(/ /g, "_"));
+          encodeURIComponent(title.replaceAll(" ", "_"));
         window.open(randomUrl, "_blank", "noopener,noreferrer");
       })
       .catch(function (error) {
@@ -259,7 +259,7 @@ export default function Home() {
         {response?.query?.search?.map((item, idx) => {
           const articleUrl =
             "https://en.wikipedia.org/wiki/" +
-            encodeURIComponent(item.title.replace(/ /g, "_"));
+            encodeURIComponent(item.title.replaceAll(" ", "_"));
           const extract = extracts?.[item.pageid]?.extract;
           const shortExtract = firstSentence(extract, 320);
           return (
@@ -286,13 +286,13 @@ export default function Home() {
                   <p className="text-md text-justify dark:text-white tracking-tight w-full">
                     {shortExtract}
                   </p>
-                  <div
+                  <button
                     onClick={() => handleClick(item.title)}
-                    className="text-zinc-400 dark:text-zinc-500 gap-[2px] flex underline cursor-pointer text-xs transition-opacity hover:opacity-70"
+                    className="text-zinc-400 dark:text-zinc-500 gap-[2px] flex underline cursor-pointer transition-opacity hover:opacity-70"
                   >
-                    <span>{articleUrl}</span>
+                    <span className="text-xs">{articleUrl}</span>
                     <IconArrowUpRight className="mt-[2px]" size={14} />
-                  </div>
+                  </button>
                 </div>
               )}
             </Transition>
