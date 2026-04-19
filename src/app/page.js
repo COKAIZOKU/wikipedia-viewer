@@ -68,8 +68,8 @@ export default function Home() {
   };
 
   /* Fetching MediaWiki API */
-  var url = "https://en.wikipedia.org/w/api.php";
-  var params = new URLSearchParams({
+  const url = "https://en.wikipedia.org/w/api.php";
+  const params = new URLSearchParams({
     action: "query",
     list: "search",
     srsearch: value,
@@ -122,6 +122,7 @@ export default function Home() {
       setLoading(false);
     }
   };
+
   /* Load the information */
   const handleClick = (title) => {
     const articleUrl =
@@ -130,8 +131,8 @@ export default function Home() {
     window.open(articleUrl, "_blank", "noopener,noreferrer");
   };
 
-  /* Random article */
-  var paramsRandom = {
+  /* Random Article */
+  const paramsRandom = {
     action: "query",
     format: "json",
     rnlimit: "1",
@@ -139,7 +140,7 @@ export default function Home() {
     rnnamespace: "0",
   };
 
-  var urlRandom = url + "?origin=*";
+  let urlRandom = url + "?origin=*";
   Object.keys(paramsRandom).forEach(function (key) {
     urlRandom += "&" + key + "=" + paramsRandom[key];
   });
@@ -150,7 +151,7 @@ export default function Home() {
         return responseRandom.json();
       })
       .then(function (responseRandom) {
-        var randoms = responseRandom.query.random;
+        let randoms = responseRandom.query.random;
         console.log(responseRandom);
         const title = randoms[0].title;
         const randomUrl =
