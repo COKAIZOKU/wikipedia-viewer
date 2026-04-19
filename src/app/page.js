@@ -83,7 +83,7 @@ export default function Home() {
     try {
       const searchRes = await fetch(`${url}?${params}`);
       const searchResponse = await searchRes.json();
-      console.log("API response:", searchResponse);
+      /* console.log("API response:", searchResponse); */
 
       const pageids = (searchResponse.query?.search || [])
         .map((x) => x.pageid)
@@ -109,16 +109,16 @@ export default function Home() {
           `https://en.wikipedia.org/w/api.php?${extractParams.toString()}`,
         );
         const extractsResponse = await extractRes.json();
-        console.log("Extracts response:", extractsResponse);
+        /* console.log("Extracts response:", extractsResponse); */
         nextExtracts = extractsResponse?.query?.pages || {};
       }
 
       setExtracts(nextExtracts);
       setResponse(searchResponse);
       setData(searchResponse);
-    } catch (error) {
-      console.log(error);
-    } finally {
+    } /* catch (error) {
+        console.log(error);
+    } */ finally {
       setLoading(false);
     }
   };
@@ -152,16 +152,16 @@ export default function Home() {
       })
       .then(function (responseRandom) {
         let randoms = responseRandom.query.random;
-        console.log(responseRandom);
+        /* console.log(responseRandom); */
         const title = randoms[0].title;
         const randomUrl =
           "https://en.wikipedia.org/wiki/" +
           encodeURIComponent(title.replaceAll(" ", "_"));
         window.open(randomUrl, "_blank", "noopener,noreferrer");
       })
-      .catch(function (error) {
+      /* .catch(function (error) {
         console.log(error);
-      });
+      }); */
   };
 
   return (
