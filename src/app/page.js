@@ -20,38 +20,45 @@ import {
 import Background from "./svg/background";
 
 export default function Home() {
+  
+  /* Dark/Light mode */
   const { setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme("light", {
     getInitialValueInEffect: true,
   });
   const [mounted, setMounted] = useState(false);
-  const [value, setValue] = useState("");
-  const [response, setResponse] = useState(null);
-  const [loading, setLoading] = useState(false); 
-  const [data, setData] = useState(null);
-  const [extracts, setExtracts] = useState({});
-  const [showResults, setShowResults] = useState(false);
-
+  
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const toggleColorScheme = () => {
+    setColorScheme(activeColorScheme === "light" ? "dark" : "light");
+  };
+  
   const activeColorScheme = mounted ? computedColorScheme : "light";
+  
+  /* API related variables */
+  const [value, setValue] = useState("");
+  const [response, setResponse] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(null);
+  const [extracts, setExtracts] = useState({});
+  const [showResults, setShowResults] = useState(false);
 
   useEffect(() => {
     if (!response) {
       setShowResults(false);
       return;
     }
-
     setShowResults(false);
     const frameId = requestAnimationFrame(() => {
       setShowResults(true);
     });
-
     return () => cancelAnimationFrame(frameId);
   }, [response]);
 
+  /* Shorten the description fetched */
   const firstSentence = (text, fallbackMaxLen = 280) => {
     if (!text) return text;
     const match = text.match(/(.+?[.!?])(\s|$)/);
@@ -60,6 +67,7 @@ export default function Home() {
     return text.slice(0, fallbackMaxLen).trimEnd() + "...";
   };
 
+  /* Fetching MediaWiki API */
   var url = "https://en.wikipedia.org/w/api.php";
   var params = new URLSearchParams({
     action: "query",
@@ -114,6 +122,7 @@ export default function Home() {
       setLoading(false);
     }
   };
+  /* Load the information */
   const handleClick = (title) => {
     const articleUrl =
       "https://en.wikipedia.org/wiki/" +
@@ -121,6 +130,7 @@ export default function Home() {
     window.open(articleUrl, "_blank", "noopener,noreferrer");
   };
 
+  /* Random article */
   var paramsRandom = {
     action: "query",
     format: "json",
@@ -133,6 +143,7 @@ export default function Home() {
   Object.keys(paramsRandom).forEach(function (key) {
     urlRandom += "&" + key + "=" + paramsRandom[key];
   });
+
   const handleRandom = () => {
     fetch(urlRandom)
       .then(function (responseRandom) {
@@ -152,36 +163,28 @@ export default function Home() {
       });
   };
 
-  const toggleColorScheme = () => {
-    setColorScheme(activeColorScheme === "light" ? "dark" : "light");
-  };
-
   return (
-    <div
-      className="bg-white dark:bg-zinc-950 relative flex min-h-screen items-center justify-center overflow-hidden font-sans"
-    >
+    <div className="bg-white dark:bg-zinc-950 relative flex min-h-screen items-center justify-center overflow-hidden font-sans">
       <div className="pointer-events-none fixed absolute inset-0 flex items-center justify-center">
         <Background />
       </div>
+      <div className="fixed right-4 top-4 z-20">
+        <ActionIcon
+          onClick={toggleColorScheme}
+          variant="transparent"
+          size="md"
+          radius="lg"
+        >
+          {activeColorScheme === "dark" ? (
+            <IconSun className="text-white" size={18} stroke={1.5} />
+          ) : (
+            <IconMoon className="text-zinc-950" size={18} stroke={1.5} />
+          )}
+        </ActionIcon>
+      </div>
       <main className="relative z-10 gap-2 flex w-full max-w-3xl flex-col items-center justify-between py-32 px-16 sm:items-start">
-        <div className="flex w-full justify-end">
-          <ActionIcon
-            onClick={toggleColorScheme}
-            variant="default"
-            size="lg"
-            aria-label="Toggle color scheme"
-          >
-            {activeColorScheme === "dark" ? (
-              <IconSun size={18} stroke={1.5} />
-            ) : (
-              <IconMoon size={18} stroke={1.5} />
-            )}
-          </ActionIcon>
-        </div>
         <div className="flex flex-col items-center gap-6 text-center items-start text-left w-full">
-          <h1
-            className="mb-3 text-5xl font-bold leading-10 tracking-tight w-full dark:text-white"
-          >
+          <h1 className="mb-3 text-5xl font-bold leading-10 tracking-tight w-full dark:text-white">
             Wikipedia <br></br> Viewer.
           </h1>
         </div>
@@ -195,7 +198,10 @@ export default function Home() {
               size="md"
               radius="xl"
               label="Search"
-              classNames={{input: "!bg-zinc-100 dark:!bg-[#0D0D0F]", label: "dark:text-white"}}
+              classNames={{
+                input: "!bg-zinc-100 dark:!bg-[#0D0D0F]",
+                label: "dark:text-white",
+              }}
               description="for a Wikipedia article."
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
@@ -205,7 +211,7 @@ export default function Home() {
               leftSection={<IconSearch size={18} stroke={1.5} />}
               rightSection={
                 loading ? (
-                  <Loader color="white" size={18} />
+                  <Loader color="gray" size={18} />
                 ) : (
                   <ActionIcon
                     size={32}
@@ -215,7 +221,11 @@ export default function Home() {
                     aria-label="Search"
                     onClick={handleSubmit}
                   >
-                    <IconArrowRight className="text-zinc" size={18} stroke={1.5} />
+                    <IconArrowRight
+                      className="text-zinc"
+                      size={18}
+                      stroke={1.5}
+                    />
                   </ActionIcon>
                 )
               }
@@ -232,7 +242,10 @@ export default function Home() {
               fullWidth
             >
               <span className="label">Random Article</span>
-              <IconArrowUpRight className="btn-icon translate-y-[1px]" size={20}/>
+              <IconArrowUpRight
+                className="btn-icon translate-y-[1px]"
+                size={20}
+              />
             </Button>
           </div>
         </div>
@@ -262,20 +275,14 @@ export default function Home() {
                   className="gap-1 mb-8 flex flex-col sm:flex-col w-full"
                 >
                   <div className="flex justify gap-2">
-                    <p
-                      className="text-2xl dark:text-white text-zinc font-semibold tracking-tight"
-                    >
+                    <p className="text-2xl dark:text-white text-zinc font-semibold tracking-tight">
                       <span>{idx + 1}.</span>
                     </p>
-                    <p
-                      className="text-2xl dark:text-white text-zinc font-semibold tracking-tight"
-                    >
+                    <p className="text-2xl dark:text-white text-zinc font-semibold tracking-tight">
                       {item.title}
                     </p>
                   </div>
-                  <p
-                    className="text-md text-justify dark:text-white tracking-tight w-full"
-                  >
+                  <p className="text-md text-justify dark:text-white tracking-tight w-full">
                     {shortExtract}
                   </p>
                   <div
@@ -284,7 +291,7 @@ export default function Home() {
                     className="text-zinc-400 dark:text-zinc-500 gap-[2px] flex underline cursor-pointer text-xs transition-opacity hover:opacity-70"
                   >
                     <span>{articleUrl}</span>
-                    <IconArrowUpRight className="mt-[2px]" size={14}/> 
+                    <IconArrowUpRight className="mt-[2px]" size={14} />
                   </div>
                 </div>
               )}

@@ -1,16 +1,10 @@
 @import "tailwindcss";
 @custom-variant dark (&:where([data-mantine-color-scheme="dark"], [data-mantine-color-scheme="dark"] *));
 
+/* Background Letter Colours */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
   --background-letter-dim: #f1f3f560;
   --background-letter-active: #f1f3f5;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
 }
 
 :root[data-mantine-color-scheme="dark"] {
@@ -18,12 +12,7 @@
   --background-letter-active: #5c5f6649;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
+/* Background Animation */
 .background g path {
   fill: var(--background-letter-dim);
   animation-name: oneLetterAtATime;
@@ -38,25 +27,69 @@ body {
   min-width: 1200px;
 }
 
-.background .letter-1 path { animation-delay: 0s; }
-.background .letter-2 path { animation-delay: -2.5s; }
-.background .letter-3 path { animation-delay: -5s; }
-.background .letter-4 path { animation-delay: -7.5s; }
-.background .letter-5 path { animation-delay: -10s; }
-.background .letter-6 path { animation-delay: -12.5s; }
-.background .letter-7 path { animation-delay: -15s; }
-.background .letter-8 path { animation-delay: -17.5s; }
-.background .letter-9 path { animation-delay: -20s; }
-.background .letter-10 path { animation-delay: -22.5s; }
-
-@keyframes oneLetterAtATime {
-  0%   { fill: var(--background-letter-dim); }
-  4%   { fill: var(--background-letter-active); }
-  8%   { fill: var(--background-letter-active); }
-  12%  { fill: var(--background-letter-dim); }
-  100% { fill: var(--background-letter-dim); }
+.background .letter-1 path {
+  animation-delay: 0s;
 }
 
+.background .letter-2 path {
+  animation-delay: -2.5s;
+}
+
+.background .letter-3 path {
+  animation-delay: -5s;
+}
+
+.background .letter-4 path {
+  animation-delay: -7.5s;
+}
+
+.background .letter-5 path {
+  animation-delay: -10s;
+}
+
+.background .letter-6 path {
+  animation-delay: -12.5s;
+}
+
+.background .letter-7 path {
+  animation-delay: -15s;
+}
+
+.background .letter-8 path {
+  animation-delay: -17.5s;
+}
+
+.background .letter-9 path {
+  animation-delay: -20s;
+}
+
+.background .letter-10 path {
+  animation-delay: -22.5s;
+}
+
+@keyframes oneLetterAtATime {
+  0% {
+    fill: var(--background-letter-dim);
+  }
+
+  4% {
+    fill: var(--background-letter-active);
+  }
+
+  8% {
+    fill: var(--background-letter-active);
+  }
+
+  12% {
+    fill: var(--background-letter-dim);
+  }
+
+  100% {
+    fill: var(--background-letter-dim);
+  }
+}
+
+/* Button Animation */
 .btn-hover {
   position: relative;
   display: flex;
@@ -86,7 +119,7 @@ body {
   transform: translateX(-6px);
 }
 
-/* Allow overflow and avoid clipping when the text shifts */
+/* allow overflow and avoid clipping when the text shifts */
 .btn-hover .mantine-Button-inner {
   overflow: visible !important;
 }
