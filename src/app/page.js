@@ -62,7 +62,7 @@ export default function Home() {
   const firstSentence = (text, fallbackMaxLen = 280) => {
     if (!text) return text;
     const match = text.match(/(.+?[.!?])(\s|$)/);
-    if (match && match[1]) return match[1].trim();
+    if (match?.[1]) return match[1].trim();
     if (text.length <= fallbackMaxLen) return text;
     return text.slice(0, fallbackMaxLen).trimEnd() + "...";
   };
@@ -127,7 +127,7 @@ export default function Home() {
   const handleClick = (title) => {
     const articleUrl =
       "https://en.wikipedia.org/wiki/" +
-      encodeURIComponent(title.replace(/ /g, "_"));
+      encodeURIComponent(title.replaceAll(/ /g, "_"));
     window.open(articleUrl, "_blank", "noopener,noreferrer");
   };
 
@@ -156,7 +156,7 @@ export default function Home() {
         const title = randoms[0].title;
         const randomUrl =
           "https://en.wikipedia.org/wiki/" +
-          encodeURIComponent(title.replace(/ /g, "_"));
+          encodeURIComponent(title.replaceAll(/ /g, "_"));
         window.open(randomUrl, "_blank", "noopener,noreferrer");
       })
       .catch(function (error) {
@@ -287,7 +287,6 @@ export default function Home() {
                     {shortExtract}
                   </p>
                   <div
-                    justify="space-between"
                     onClick={() => handleClick(item.title)}
                     className="text-zinc-400 dark:text-zinc-500 gap-[2px] flex underline cursor-pointer text-xs transition-opacity hover:opacity-70"
                   >
